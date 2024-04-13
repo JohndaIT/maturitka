@@ -77,7 +77,7 @@ public class HelloController {
 
         if(deti == 0)bonus = 0;
 
-        else if(deti ==1) bonus = 1267;
+        else if(deti == 1) bonus = 1267;
 
         else if(deti == 2) bonus = 1617;
 
