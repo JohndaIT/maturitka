@@ -1,0 +1,95 @@
+package com.example.vypocetmzdy;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+
+public class HelloController {
+
+    @FXML
+    private TextField hrubaMzda;
+
+    @FXML
+    private TextField premie;
+
+    @FXML
+    private Label pocetDeti;
+
+    @FXML
+    private Label social;
+
+    @FXML
+    private Label zdrav;
+
+    @FXML
+    private Label dan;
+
+    @FXML
+    private Label cistaMzda;
+
+    private int number = 0;
+
+
+
+
+    public void minus(ActionEvent event) {
+        number--;
+        pocetDeti.setText(String.valueOf(number));
+    }
+
+
+    public void plus(ActionEvent event) {
+        number++;
+        pocetDeti.setText(String.valueOf(number));
+
+    }
+
+    public void vypocitej(ActionEvent event) {
+        String HM = hrubaMzda.getText();
+        int hruba = Integer.parseInt(HM);
+        //System.out.println(hruba);
+
+        String prem = premie.getText();
+        int pr = Integer.parseInt(prem);
+
+
+        int vyplata = hruba + pr;
+        //System.out.println(vyplata);
+
+
+
+
+        int socialni = (int) (vyplata * 0.065);
+        //System.out.println(socialni);
+        social.setText(String.valueOf(socialni));
+
+        int zdravotni = (int) (vyplata * 0.045);
+        zdrav.setText(String.valueOf(zdravotni));
+
+        int zalohaNaDan = (int) (vyplata * 0.15);
+        dan.setText(String.valueOf(zalohaNaDan));
+
+
+        int bonus = 0;
+
+        int deti = Integer.parseInt(String.valueOf(number));
+
+        if(deti == 0)bonus = 0;
+
+        else if(deti ==1) bonus = 1267;
+
+        else if(deti == 2) bonus = 1617;
+
+        else if(deti == 3) bonus = 2017;
+
+        else if(deti >= 3) bonus = 2017;
+
+        else bonus = 0;
+
+
+        int cista = vyplata - socialni - zdravotni - zalohaNaDan + bonus;
+        cistaMzda.setText(String.valueOf(cista));
+    }
+
+}
