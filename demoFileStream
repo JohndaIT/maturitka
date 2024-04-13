@@ -1,0 +1,103 @@
+package com.example.demofilestream;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.DatePicker;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
+import javafx.scene.web.HTMLEditor;
+import javafx.stage.FileChooser;
+
+import java.io.*;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class CronController implements Initializable {
+    @FXML
+    Text myFile; //informační text o tom jaký soubor je aktuálně pracovní
+    @FXML
+    HTMLEditor content;
+    @FXML
+    DatePicker dp;
+    @FXML
+    AnchorPane ap;
+    File cron; //pracovní soubor pro ulozeni poznámek
+    File defaultCron; //defaultní soubor pro uložení poznámek
+
+    public void open(ActionEvent actionEvent) {
+        try(BufferedReader br = new BufferedReader(new FileReader(cron))) {
+            //cteni ze souboru
+            String line;
+            while((line = br.readLine())!=null){
+              //datum do datapickeru a zbytek do htmleditoru
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public void load(ActionEvent actionEvent) {
+        File dir = new File(new File(System.getProperty("user.home")), "KronikaS");
+        FileChooser fc = new FileChooser();
+        fc.setInitialDirectory(dir);
+        fc.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Vše", "*.*"),
+                new FileChooser.ExtensionFilter("Text", "*.txt"),
+                new FileChooser.ExtensionFilter("Obrázky", "*.png")
+        );
+        fc.setTitle("Vyber soubor nastavení...");
+        cron = fc.showOpenDialog(ap.getScene().getWindow());
+        if (cron != null) fileInfo(cron);
+        else cron = defaultCron;
+    }
+
+    void fileInfo(File f) {
+        myFile.setText("načtena defaultní kronika: " + f.getName().substring(0, f.getName().lastIndexOf(".")) + " (" + f.length() + "B)");
+    }
+
+    public void save(ActionEvent actionEvent) {
+        String sContent; //obsah, ktery prijde ulozit do souboru
+        sContent = dp.getEditor().getText();
+        BufferedWriter bf = null;
+        try {
+            bf = new BufferedWriter(new FileWriter(cron));
+            bf.write(sContent);
+            bf.newLine();
+            bf.flush();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            if (bf != null) {
+                try {
+                    bf.close();
+                } catch (IOException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        System.out.println("Inicializace...");
+        File dir = new File(System.getProperty("user.home"));
+        File myDir = new File(dir, "KronikaS");
+        File file = new File(myDir, "kronika.txt");
+        if (!myDir.exists()) {
+            myDir.mkdir();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        cron = file;
+        defaultCron = file;
+        System.out.println("načtena defaultní kronika " + cron.getName().substring(0, cron.getName().indexOf(".")));
+        fileInfo(cron);
+    }
+}
