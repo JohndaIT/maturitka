@@ -1,0 +1,94 @@
+package com.example.hbb2000;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+
+import java.io.*;
+
+public class HelloController {
+
+    @FXML
+    AnchorPane ap;
+    @FXML
+    TextField path;
+
+    @FXML
+    TextField name;
+    File htmlFile;
+
+    public void initialize() {
+        File dir = new File(System.getProperty("user.home"));
+        path.setText(dir.getAbsolutePath());
+        name.setText("index.html");
+    }
+
+    public void browse(ActionEvent actionEvent) {
+        DirectoryChooser dc = new DirectoryChooser();
+        File dir = new File(System.getProperty("user.home"));
+        dc.setInitialDirectory(dir);
+        dc.setTitle("Vyber adresář...");
+        File selectedDirectory = dc.showDialog(ap.getScene().getWindow());
+        if (selectedDirectory != null) {
+            path.setText(selectedDirectory.getAbsolutePath());
+        } else {
+            path.setText("Nebyl vybrán žádný adresář");
+        }
+    }
+
+    public void create(ActionEvent actionEvent) {
+        File selectedDirectory = new File(path.getText());
+
+        if (selectedDirectory != null) {
+            if (!selectedDirectory.exists()) {
+                boolean result = selectedDirectory.mkdir();
+                if (!result) {
+                    System.out.println("Failed to create directory");
+                    return;
+                }
+            }
+            FileChooser fc = new FileChooser();
+            fc.setInitialDirectory(selectedDirectory);
+            fc.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("HTML", "*.html"),
+                    new FileChooser.ExtensionFilter("VŠE", "*.*")
+            );
+            fc.setTitle("Vytvoř nový soubor...");
+            File newFile = fc.showSaveDialog(ap.getScene().getWindow());
+
+            if (newFile != null) {
+                try {
+                    if (newFile.createNewFile()) {
+                        System.out.println("soubor vytvoren: " + newFile.getName());
+
+                        PrintWriter writer = new PrintWriter(newFile);
+                        writer.println("<!DOCTYPE html>");
+                        writer.println("<html>");
+                        writer.println("<head>");
+                        writer.println("<title>Smista je borec</title>");
+                        writer.println("</head>");
+                        writer.println("<body>");
+                        writer.println("Smista je buh");
+                        writer.println("</body>");
+                        writer.println("</html>");
+                        writer.close();
+                    } else {
+                        System.out.println("soubor jiz existuje.");
+                    }
+                } catch (IOException e) {
+                    System.out.println(e.getStackTrace());
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Nebyl vybran zadny soubor");
+            }
+        } else {
+            System.out.println("Nebyl vybran zadny adresar");
+        }
+    }
+}
