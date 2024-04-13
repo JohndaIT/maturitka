@@ -1,0 +1,25 @@
+package com.example.pocitadlo;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+
+public class HelloController {
+    @FXML
+    Label vysledek;
+
+//tlačítko s On Action: pricist
+    public void pricist(ActionEvent event) {
+        int value = Integer.parseInt(vysledek.getText());
+        value++;
+        vysledek.setText(String.valueOf(value));
+    }
+
+//tlačítko s On Action: odecist
+    public void odecist(ActionEvent event) {
+        int value = Integer.parseInt(vysledek.getText());
+        value--;
+        vysledek.setText(String.valueOf(value));
+    }
+}
