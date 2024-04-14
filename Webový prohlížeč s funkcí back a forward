@@ -1,0 +1,61 @@
+package com.example.mywebbrowser;
+
+import javafx.concurrent.Worker;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebHistory;
+import javafx.scene.web.WebView;
+
+public class HelloController {
+
+    @FXML
+    private TextField links;
+
+    @FXML
+    private WebView view;
+
+    @FXML
+    void initialize() {
+        loadInitialPage();
+        links.setOnAction(event -> loadPage());
+        WebEngine webEngine = view.getEngine();
+        webEngine.getLoadWorker().stateProperty().addListener((observable,oldValue,newValue) -> {
+            if (newValue == Worker.State.SUCCEEDED) {
+                String currentUrl = webEngine.getLocation();
+                links.setText(currentUrl);
+            }
+        });
+    }
+
+    @FXML
+    void back(ActionEvent event) {
+        WebEngine webEngine = view.getEngine();
+        WebHistory history = webEngine.getHistory();
+        if(history.getCurrentIndex()>0) {
+            history.go(-1);
+        }
+    }
+
+    @FXML
+    void forward(ActionEvent event) {
+        WebEngine webEngine = view.getEngine();
+        WebHistory history = webEngine.getHistory();
+        if(history.getCurrentIndex()<history.getEntries().size()-1) {
+            history.go(1);
+        }
+    }
+    private void loadInitialPage() {
+        WebEngine webEngine = view.getEngine();
+        webEngine.load("https://google.com");
+    }
+    private void loadPage() {
+        String url = links.getText();
+        WebEngine webEngine = view.getEngine();
+        if(!url.startsWith("https://") && !url.startsWith("https://")) {
+            url = "https://" + url;
+        }
+        webEngine.load(url);
+    }
+}
