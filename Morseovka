@@ -13,14 +13,14 @@ import java.util.ResourceBundle;
 public class HelloController implements Initializable {
 
     @FXML
-    private TextArea resultArea;
+    private TextArea vysledek;
     @FXML
-    private Button translateBtn;
+    private Button preloz;
+    @FXML
+    private TextField zadaniPismen;
 
-    @FXML
-    private TextField userField;
-    //Pole znaků podle morzeova písma
-    String[] Morzeovka = new String[]{
+    //Pole znaků morseovky
+    String[] Morseovka = new String[]{
             "●-",
             "-●●●",
             "-●-●",
@@ -59,7 +59,7 @@ public class HelloController implements Initializable {
             "----●",
             "    "
     };
-    //Pole znaků
+    //Pole písmen a čísel
     char[] Letter = new char[]{
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' '
     };
@@ -68,12 +68,12 @@ public class HelloController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Přiřazení getResult na tlačítko
-        translateBtn.setOnAction(this::getResult);
+        preloz.setOnAction(this::getTranslation);
     }
 
     //Porovnání znaků
-    void getResult(ActionEvent event){
-        String text = userField.getText();
+    void getTranslation(ActionEvent event){
+        String text = zadaniPismen.getText();
         String resultText = "";
         char[] poleZnaku = text.toCharArray();
 
@@ -81,7 +81,7 @@ public class HelloController implements Initializable {
             int i = 0;
             for (char itemZnak : Letter) {
                 if (item == itemZnak) { // zde získáme první znak z řetězce
-                    resultText += Morzeovka[i] + " | ";
+                    resultText += Morseovka[i] + " | ";
                     break; // Zastaví procházení, protože jsme našli odpovídající znak
                 }
                 i++;
@@ -90,6 +90,6 @@ public class HelloController implements Initializable {
                 }
             }
         }
-        resultArea.setText(resultText);
+        vysledek.setText(resultText);
     }
 }
