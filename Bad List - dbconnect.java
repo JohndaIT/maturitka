@@ -29,7 +29,7 @@ public class dbconnect {
         } catch (ClassNotFoundException e) {
             System.out.println("Ovladač nebyl nalezen pro MySQL database: " + e.getMessage());
         } catch (SQLException e) {
-            System.out.println("Chyba spojenín s dazabází: " + e.getMessage());
+            System.out.println("Chyba spojení s dazabází: " + e.getMessage());
         }
     }
 
